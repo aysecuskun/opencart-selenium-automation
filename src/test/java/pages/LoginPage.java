@@ -10,6 +10,8 @@ public class LoginPage {
 	private By password;
 	private By btnClickbutton;
 	private By myAccountTitle;
+	private By loginError;
+
 	      
 	public LoginPage(WebDriver driver) {
 		
@@ -18,6 +20,9 @@ public class LoginPage {
 		password=By.cssSelector("#input-password");
 		btnClickbutton=By.xpath("//button[normalize-space()='Login']");
 		myAccountTitle=By.xpath("//h1[normalize-space()='My Account']");
+		loginError=By.cssSelector("div.alert.alert-danger");
+		
+		
 	}
 	 
 	public void getLogin(String _email,String _password) {
@@ -31,5 +36,12 @@ public class LoginPage {
 	    return driver.findElement(myAccountTitle).isDisplayed();
 	}
 	
-
+	public boolean isLoginErrorDisplayed() {
+		
+		return driver.findElement(loginError).isDisplayed();
+	}
+	
+	public String getLoginErrorMessage() {
+	    return driver.findElement(loginError).getText();
+	}
 }

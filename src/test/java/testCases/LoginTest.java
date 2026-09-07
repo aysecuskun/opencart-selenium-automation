@@ -1,5 +1,7 @@
 package testCases;
 
+import static org.testng.Assert.assertEquals;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -7,7 +9,9 @@ import pages.HomePage;
 import pages.LoginPage;
 import testBase.BaseClass;
 
-public class LoginTest extends BaseClass {
+public class LoginTest extends BaseClass {  //Smoke Test 
+	
+	
 	@Test
 	public void LoginClick() {
 		  
@@ -17,7 +21,10 @@ public class LoginTest extends BaseClass {
 		
 		LoginPage loginpage=new LoginPage(driver);
 		loginpage.getLogin("Deneme1@gmail.com", "Deneme1");
+		
 		Assert.assertTrue(loginpage.isLoginSuccessful());
+		
+	    
 		
 		
 	}
