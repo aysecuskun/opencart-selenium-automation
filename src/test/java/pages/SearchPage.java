@@ -21,7 +21,7 @@ public class SearchPage {
 	        this.driver = driver;
 	      
 	        productImage = By.cssSelector("img[title='HP LP3065']");//sepette olan ürünün ismi
-	        noProductMessage = By.cssSelector("#content p");   //sepette ürün yoksa mesajı 
+	        noProductMessage = By.xpath("//div[@id='content']//p");   // ürün girildikten sonra aranılan değerin olmadığını veren locator 
 	    	searchHeading=By.cssSelector("div[id='content'] h1");
 
 	    }
@@ -43,6 +43,13 @@ public class SearchPage {
 	    	    return wait.until(
 	    	        ExpectedConditions.visibilityOfElementLocated(searchHeading)
 	    	    ).getText();
+	    }
+	    
+	    public boolean isProductDisplayed(String productName) {
+	        
+	        By product = By.xpath("//div[contains(@class,'product-thumb')]//img[contains(@alt,'" + productName + "')]");
+
+	        return driver.findElements(product).size() > 0;
 	    }
 	 
 

@@ -2,6 +2,7 @@ package testCases;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import pages.HomePage;
@@ -10,10 +11,20 @@ import pages.SearchPage;
 import testBase.BaseClass;
 
 public class SearchTest extends BaseClass{
-  
+    
+	@DataProvider(name = "searchData")
+	public Object[][] searchData() {
+	    return new Object[][] {
+	        {"HP LP3065", "existing"},
+	        {"XYZ123NonExistingProduct", "notExisting"}
+	    };
+	}
+	
 	@BeforeMethod
 	public void setUpSearch() {
-
+		
+		driver.manage().deleteAllCookies();
+		driver.get(baseURL);
 	    HomePage homepage = new HomePage(driver);
 
 	    homepage.goToLoginPage();
@@ -25,24 +36,32 @@ public class SearchTest extends BaseClass{
 	
 	}
 	
-	@Test
-	public void searchProduct() {
+	@Test(dataProvider = "searchData")
+	public void searchProduct(String product, String scenario) {
 	  
 
 	    HomePage homepage = new HomePage(driver);
-        homepage.searchProduct("HP LP3065");
+        homepage.searchProduct(product);
         
         SearchPage searchpage=new SearchPage(driver);
         Assert.assertEquals(
-                searchpage.getSearchHeading(),
-                "Search - HP LP3065"
+                searchpage.getSearchHeading(), "Search - " +product);
+        
+    
+        if (scenario.equals("existing")) {
+
+            Assert.assertEquals(
+                    searchpage.getProductName(),
+                    product
             );
-        
-        Assert.assertEquals(
-        	    searchpage.getProductName(),
-        	    "HP LP3065"
-        	);
-        
+
+        } else if (scenario.equals("notExisting")) {
+
+            Assert.assertEquals(
+                    searchpage.getNoProductMessage(),
+                    "There is no product that matches the search criteria."
+            );
+        }
      
 	}
 	

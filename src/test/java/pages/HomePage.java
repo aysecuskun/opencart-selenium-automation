@@ -35,9 +35,7 @@ public class HomePage {
             driver.findElement(searchBox).sendKeys(productName);
             driver.findElement(searchButton).click();
         }
-        public void goToHomePage() {
-            driver.findElement(homeLink).click();
-        }
+     
         
      
 }

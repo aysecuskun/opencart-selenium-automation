@@ -13,7 +13,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 public class BaseClass {
 	
 	public WebDriver driver;
-	
+	public String baseURL="http://localhost/opencart/upload/index.php";
 	@BeforeTest
 	public void setup() {
 
@@ -35,7 +35,7 @@ public class BaseClass {
 
 	    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-	    driver.get("http://localhost/opencart/upload/index.php");
+	    driver.get(baseURL);
 
 	    driver.manage().window().maximize();
 	}

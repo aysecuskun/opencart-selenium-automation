@@ -24,6 +24,7 @@ public class LoginTest extends BaseClass {  //Smoke Test
 		
 		Assert.assertTrue(loginpage.isLoginSuccessful());
 		
+		
 	}
 
 }
