@@ -1,14 +1,17 @@
-package pages;
+package testCases;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import pages.HomePage;
+import pages.LoginPage;
+import pages.SearchPage;
 import testBase.BaseClass;
 
 public class SpecialCharacters extends BaseClass{
-	
+
 	@DataProvider(name = "specialCharacterData")
 	public Object[][] specialCharacterData() {
 	    return new Object[][] {

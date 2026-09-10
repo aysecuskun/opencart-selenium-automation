@@ -16,7 +16,8 @@ public class SearchTest extends BaseClass{
 	public Object[][] searchData() {
 	    return new Object[][] {
 	        {"HP LP3065", "existing"},
-	        {"XYZ123NonExistingProduct", "notExisting"}
+	        {"XYZ123NonExistingProduct", "notExisting"},
+	        {"", "empty"}
 	    };
 	}
 	
@@ -44,11 +45,12 @@ public class SearchTest extends BaseClass{
         homepage.searchProduct(product);
         
         SearchPage searchpage=new SearchPage(driver);
-        Assert.assertEquals(
-                searchpage.getSearchHeading(), "Search - " +product);
-        
-    
         if (scenario.equals("existing")) {
+
+            Assert.assertEquals(
+                    searchpage.getSearchHeading(),
+                    "Search - " + product
+            );
 
             Assert.assertEquals(
                     searchpage.getProductName(),
@@ -58,11 +60,23 @@ public class SearchTest extends BaseClass{
         } else if (scenario.equals("notExisting")) {
 
             Assert.assertEquals(
+                    searchpage.getSearchHeading(),
+                    "Search - " + product
+            );
+
+            Assert.assertEquals(
+                    searchpage.getNoProductMessage(),
+                    "There is no product that matches the search criteria."
+            );
+
+        } else if (scenario.equals("empty")) {
+
+            Assert.assertEquals(
                     searchpage.getNoProductMessage(),
                     "There is no product that matches the search criteria."
             );
         }
+    }
      
 	}
 	
-}

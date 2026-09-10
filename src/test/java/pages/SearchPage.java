@@ -3,7 +3,10 @@ package pages;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -13,14 +16,15 @@ public class SearchPage {
 
 	    // Locators
 	  
-	    private By productImage;
+	    //private By productImage;
 	    private By noProductMessage;
 	    private By searchHeading;  
+	    private By productImage = By.cssSelector("div.product-thumb img");
 
 	    public SearchPage(WebDriver driver) {
 	        this.driver = driver;
 	      
-	        productImage = By.cssSelector("img[title='HP LP3065']");//sepette olan ürünün ismi
+	       // productImage = By.cssSelector("img[title='HP LP3065']");//sepette olan ürünün ismi
 	        noProductMessage = By.xpath("//div[@id='content']//p");   // ürün girildikten sonra aranılan değerin olmadığını veren locator 
 	    	searchHeading=By.cssSelector("div[id='content'] h1");
 
@@ -52,5 +56,19 @@ public class SearchPage {
 	        return driver.findElements(product).size() > 0;
 	    }
 	 
+	    public By productLink (String productName) {
+	    	  return By.xpath(
+	    		        "//div[contains(@class,'product-thumb')]//a[img[@alt='" + productName + "']]"
+	    		    );
+	    }
+	    
+	    public void clickProduct(String productName) {
 
+	    	WebElement product = driver.findElement(productLink(productName));
+
+	        new Actions(driver)
+	                .moveToElement(product)
+	                .click()
+	                .perform();
+	    }
 }
