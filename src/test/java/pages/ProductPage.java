@@ -12,6 +12,9 @@ public class ProductPage {
 	private By addToCartButton;
 	private By addToCartAlert;
 	private By shoppingCartLink;
+	private By productPrice;
+	private By productImage;
+	private By basketLink;
 	
 	public ProductPage(WebDriver driver) {
 		this.driver=driver;
@@ -21,6 +24,9 @@ public class ProductPage {
 		 addToCartButton=By.cssSelector("#button-cart");
 		 addToCartAlert = By.cssSelector("#alert .alert-success");
 		 shoppingCartLink=By.cssSelector("#alert .alert-success a[href*='checkout/cart']");
+		 productPrice = By.cssSelector("ul[class='list-unstyled'] span[class='price-new']");
+		 productImage=By.cssSelector("img.img-thumbnail.mb-3");
+		 basketLink = By.cssSelector("a[title='Shopping Cart']");
 	}
 	
 	  public String getProductName() {
@@ -32,6 +38,11 @@ public class ProductPage {
 		  return driver.findElement(quantityCount).getAttribute("value");
 	  }
 	  
+	  public void enterQuantity(String quantity) {
+		    driver.findElement(quantityCount).clear();
+		    driver.findElement(quantityCount).sendKeys(quantity);
+		}
+	  
 	  public void addToCartButtonClick() {
 		  
 		  driver.findElement(addToCartButton).click();
@@ -40,9 +51,21 @@ public class ProductPage {
 	  public String getAddToCartAlertMessage() {
 		    return driver.findElement(addToCartAlert).getText();
 		}
+	  
 	  public void clickShoppingCartLink() {
 		    driver.findElement(shoppingCartLink).click();
 		}
 	  
-	
+	  public String getProductPrice() {
+		    return driver.findElement(productPrice).getText();
+		}
+	  
+	  public boolean isProductImageDisplayed() {
+		    return driver.findElement(productImage).isDisplayed();
+		}
+	  public void goToBasket() {
+		    driver.findElement(basketLink).click();
+		}
+
+		
 }
