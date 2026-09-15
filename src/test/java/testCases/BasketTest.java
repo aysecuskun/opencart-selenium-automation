@@ -5,6 +5,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import pages.BasketPage;
+import pages.CheckoutPage;
 import pages.HomePage;
 import pages.LoginPage;
 import pages.ProductPage;
