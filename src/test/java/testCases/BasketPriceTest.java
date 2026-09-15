@@ -11,7 +11,7 @@ import pages.ProductPage;
 import pages.SearchPage;
 import testBase.BaseClass;
 
-public class QuantityTest extends BaseClass {
+public class BasketPriceTest extends BaseClass {
 	
 	@BeforeMethod
 	public void setUpSearch() {
@@ -30,29 +30,13 @@ public class QuantityTest extends BaseClass {
 	    homepage = new HomePage(driver); 
 		homepage.searchProduct("Iphone"); 
 		SearchPage searchpage = new SearchPage(driver);
+		
 		String productName = searchpage.getProductName();
 		searchpage.clickProduct(productName); 
-	 
-	}
-	 @Test(priority=1)                                                      //sepete girilen değeri değiştirme işelmi 
-	    public void verifyDifferentQuantityCanBeEntered() {
-		  ProductPage productPage = new ProductPage(driver);
-	        productPage.enterQuantity("7");
-
-	        Assert.assertEquals(productPage.getQuantityValue(),"7");
-	    }
-	    
-	  
-	 
-	 /*  Bu adımın başarılı olması için sepetin boş olması gerekiyor  */
-	 @Test(priority=2)  
-	 //ürüne ekleme yaptığımızda değişiklik sepette de aynı mı
-	 public void verifyIncreasedQuantityIsAddedToBasket() {
-		 
+		
 		 ProductPage productPage = new ProductPage(driver);
 
 		 productPage.goToBasket();
-	
 
 		 BasketPage basketpage = new BasketPage(driver);
 
@@ -62,24 +46,44 @@ public class QuantityTest extends BaseClass {
 		         basketpage.getEmptyBasketMessage(),
 		         "Your shopping cart is empty!"
 		 );
-	    
-		 HomePage homepage = new HomePage(driver);
+		 
+		 homepage = new HomePage(driver);
 		 homepage.searchProduct("Iphone");
 
-		 SearchPage searchpage = new SearchPage(driver);
-		 String productName = searchpage.getProductName();
+		 searchpage = new SearchPage(driver);
+		 productName = searchpage.getProductName();
 		 searchpage.clickProduct(productName);
-
-		 productPage = new ProductPage(driver);
-		 productPage.enterQuantity("5");
-		 productPage.addToCartButtonClick();
-
-		 // BURADA success alert içindeki link kullanılacak
-		 productPage.clickShoppingCartLink();
-
-		 int basketQuantity = basketpage.getProductQuantity();
-
-		 Assert.assertEquals(basketQuantity, 5);
-	 }
+	}
 	
+	/*add to cart sonrası sepette olan ürün fiyatının önceden eklenen ürün fiyatıyla aynı olup olmadığını test eden senaryo */
+
+		 @Test                         
+		 public void verifyProductPriceInBasket() {             // 
+		     ProductPage productPage = new ProductPage(driver);
+
+		     String productPrice = productPage.getProductPrice();
+
+		     productPage.addToCartButtonClick();
+
+		     Assert.assertTrue(
+		         productPage.getAddToCartAlertMessage()
+		             .contains("Success: You have added")
+		     );
+
+		     productPage.clickShoppingCartLink();
+
+		     BasketPage basketPage = new BasketPage(driver);
+
+		     Assert.assertEquals(
+		         basketPage.getProductPrice(),
+		         productPrice
+		     );
+		     
+		     System.out.println(productPrice);
+		     
+		 }
+		 
 }
+	
+	
+

@@ -75,7 +75,7 @@ import pages.HomePage;
 
 		        SearchPage searchpage = new SearchPage(driver);
 
-		        String productName = searchpage.getProductName();
+		        String productName = searchpage.getProductName();//aranılan ürün ismi
 
 		        searchpage.clickProduct(productName);
 
