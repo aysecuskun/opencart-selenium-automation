@@ -1,12 +1,20 @@
 package pages;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 public class CheckoutPage {
 	
 	private WebDriver driver;
+	private WebDriverWait wait;
 	private By checkoutHeading;
 	private By firstName;
     private By lastName;
@@ -19,8 +27,7 @@ public class CheckoutPage {
     private By address2;
 
     private By shippingAddressContinueButton;
-    // Shipping Address Validation
-    private By validationMessages;
+  
     // Shipping Method
     private By shippingMethodChooseButton;
     // Shipping Method Selection
@@ -32,10 +39,25 @@ public class CheckoutPage {
     private By paymentMethodChooseButton;
     // Payment Method Selection
     private By paymentMethodContinueButton;
+    
+	// Shipping Address Validation
+	private By firstNameValidation;
+	private By lastNameValidation;
+	private By address1Validation;
+	private By cityValidation;
+	private By postCodeValidation;
+	private By regionStateValidation;
+	
+	// Shipping Method Validation
+	private By shippingMethodValidation;
+	
+	// Payment Method Validation
+	private By paymentMethodValidation;
 	
 	public CheckoutPage(WebDriver driver) {
 		
 		this.driver=driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 		checkoutHeading=By.xpath("//h1[normalize-space()='Checkout']");
 		firstName=By.cssSelector("#input-shipping-firstname");
 		lastName=By.cssSelector("#input-shipping-lastname");
@@ -46,13 +68,23 @@ public class CheckoutPage {
 		postCode=By.cssSelector("#input-shipping-postcode");
 		country = By.id("input-shipping-country");       //dropdown
 		regionState = By.id("input-shipping-zone");      //dropdown
-		shippingAddressContinueButton=By.id("button-shipping-address");
+		shippingAddressContinueButton=By.xpath("//button[@id='button-shipping-address']");
 		shippingMethodChooseButton=By.id("button-shipping-methods");
 		paymentMethodChooseButton=By.id("button-payment-methods");
 		
 		shippingMethodContinueButton=By.id("button-shipping-method");
 		paymentMethodContinueButton=By.id("button-payment-method");
 		
+		firstNameValidation = By.id("error-shipping-firstname");
+		lastNameValidation = By.id("error-shipping-lastname");
+		address1Validation = By.id("error-shipping-address-1");
+		cityValidation = By.id("error-shipping-city");
+		postCodeValidation = By.id("error-shipping-postcode");
+		regionStateValidation = By.id("error-shipping-zone");
+
+		shippingMethodValidation = By.id("error-shipping-method");
+		paymentMethodValidation = By.id("error-payment-method");
+	
 	}
 		
 		public String getCheckoutHeading() {
@@ -89,16 +121,83 @@ public class CheckoutPage {
 		    driver.findElement(this.postCode).sendKeys(postCode);
 		}
 		public void selectCountry(String countryName) {
-		    Select countrySelect = new Select(driver.findElement(country));
+			Select countrySelect = new Select(driver.findElement(country));
 		    countrySelect.selectByVisibleText(countryName);
+
+		    wait.until(driver -> {
+		        Select select = new Select(driver.findElement(country));
+		        return select.getFirstSelectedOption()
+		                     .getText()
+		                     .equals(countryName);
+		    });
 		}
 		public void selectRegionState(String regionName) {
-		    Select regionSelect = new Select(driver.findElement(regionState));
-		    regionSelect.selectByVisibleText(regionName);
+			   Select select =
+			            new Select(driver.findElement(regionState));
+
+			    select.selectByVisibleText(regionName);
 		}
 		
 		public void clickShippingAddressContinue() {
-		    driver.findElement(shippingAddressContinueButton).click();
+			WebElement button = driver.findElement(shippingAddressContinueButton);
+
+		    ((JavascriptExecutor) driver).executeScript(
+		        "arguments[0].scrollIntoView({block: 'center'});",
+		        button
+		    );
+
+		    ((JavascriptExecutor) driver).executeScript(
+		        "arguments[0].click();",
+		        button
+		    );
+		}
+		
+		public String getFirstNameValidation() {
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5)); 
+			WebElement element = wait.until( ExpectedConditions.visibilityOfElementLocated( firstNameValidation ) );
+			return element.getAttribute("textContent").trim();
+		}
+
+		public String getLastNameValidation() {
+			
+			WebElement element = wait.until( ExpectedConditions.visibilityOfElementLocated( lastNameValidation ) );
+			return element.getAttribute("textContent").trim();
+		}
+
+		public String getAddress1Validation() {
+			WebElement element = wait.until( ExpectedConditions.visibilityOfElementLocated( address1Validation ) );
+			return element.getAttribute("textContent").trim();
+			
+		}
+
+		public String getCityValidation() {
+			WebElement element = wait.until( ExpectedConditions.visibilityOfElementLocated( cityValidation ) );
+			return element.getAttribute("textContent").trim();
+			
+		}
+
+		public String getPostCodeValidation() {
+			WebElement element = wait.until( ExpectedConditions.visibilityOfElementLocated( postCodeValidation ) );
+			return element.getAttribute("textContent").trim();
+			
+		}
+
+		public String getRegionStateValidation() {
+			WebElement element = wait.until( ExpectedConditions.visibilityOfElementLocated( regionStateValidation ) );
+			return element.getAttribute("textContent").trim();
+			
+		}
+
+		public String getShippingMethodValidation() {
+			WebElement element = wait.until( ExpectedConditions.visibilityOfElementLocated( shippingMethodValidation ) );
+			return element.getAttribute("textContent").trim();
+			
+		}
+
+		public String getPaymentMethodValidation() {
+			WebElement element = wait.until( ExpectedConditions.visibilityOfElementLocated( paymentMethodValidation ) );
+			return element.getAttribute("textContent").trim();
+		
 		}
 
 }
