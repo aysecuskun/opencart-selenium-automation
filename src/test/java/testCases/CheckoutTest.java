@@ -93,12 +93,12 @@ public class CheckoutTest extends BaseClass{
                 "Last Name must be between 1 and 32 characters!"
             );
         }
-        
+       
         @Test(priority = 6)
         public void verifyAddress1Validation() {
 
             CheckoutPage checkout = new CheckoutPage(driver);
-
+            checkout.selectNewAddress();
             checkout.enterFirstName("Test");
             checkout.enterLastName("User");
             checkout.enterCity("Istanbul");
@@ -174,8 +174,97 @@ public class CheckoutTest extends BaseClass{
                 "Please select a region / state!"
             );
         }
-        
+     
+        @Test(priority = 10)
+        public void verifyFirstNameMinimumLength() {
 
+            CheckoutPage checkout = new CheckoutPage(driver);
+            checkout.selectNewAddress();
+
+            checkout.enterFirstName("A");
+            checkout.enterLastName("Test");
+            checkout.enterAddress1("Test Address");
+            checkout.enterCity("Istanbul");
+            checkout.enterPostCode("34000");
+            checkout.selectCountry("United Kingdom");
+            checkout.selectRegionState("Bristol");
+
+            checkout.clickShippingAddressContinue();
+
+            Assert.assertFalse(
+                checkout.isFirstNameValidationDisplayed()
+            );
+            
+        }
+        
+        @Test(priority = 11)
+        public void verifyAddress1MaximumLengthExceeded() {
+
+            CheckoutPage checkout = new CheckoutPage(driver);
+
+            checkout.selectNewAddress();
+
+            checkout.enterFirstName("A");
+            checkout.enterLastName("Test");
+
+            String address = "Test Adres testtettstststtststtststststssttstsstttttttttttttttttttttttttttttttttttttttttttttttttttt777777777777777777777777777777777777777777777777777777777777777777";
+            System.out.println("Length: " + address.length());
+            checkout.enterAddress1(address);
+
+            checkout.enterCity("Istanbul");
+            checkout.enterPostCode("34000");
+            checkout.selectCountry("United Kingdom");
+            checkout.selectRegionState("Bristol");
+
+            checkout.clickShippingAddressContinue();
+
+            Assert.assertEquals(
+                    checkout.getAddress1Validation(),
+                    "Address 1 must be between 3 and 128 characters!"
+                );
+        }
+        
+        @Test(priority = 12)
+        public void verifyShippingAddressSuccessfullySubmitted() {
+
+            CheckoutPage checkout = new CheckoutPage(driver);
+
+            checkout.selectNewAddress();
+
+            checkout.enterFirstName("A");
+            checkout.enterLastName("Test");
+            checkout.enterAddress1("Test Address");
+            checkout.enterCity("Istanbul");
+            checkout.enterPostCode("34000");
+            checkout.selectCountry("South Korea");
+            checkout.selectRegionState("Busan-gwangyeoksi");
+
+            checkout.clickShippingAddressContinue();
+
+            Assert.assertEquals(
+                checkout.getShippingAddressSuccessAlertMessage(),
+                "Success: You have changed shipping address!"
+            );
+        }
+        
+         
+        @Test(priority = 13)
+        public void verifyShippingMethodSelection() {
+
+            CheckoutPage checkout = new CheckoutPage(driver);
+            checkout.selectExistingAdddress("A Test, Test Address, Istanbul, Bristol, United Kingdom");
+            Assert.assertEquals(
+                    checkout.getShippingAddressSuccessAlertMessage(),
+                    "Success: You have changed shipping address!"
+                );
+            checkout.clickShippingMethodChoose();
+            checkout.clickShippingMethodContinue();
+            Assert.assertEquals(
+                    checkout.getShippingMethodSuccessAlertMessage(),
+                    "Success: You have changed shipping method!"
+                );
+        }
+        
      }
 	
 	

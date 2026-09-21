@@ -30,10 +30,12 @@ public class CheckoutPage {
   
     // Shipping Method
     private By shippingMethodChooseButton;
+    // Shipping Method redio
+	private By shippingMethodRadioButton;
     // Shipping Method Selection
     private By shippingMethodContinueButton;
     // Alert
-    private By alertMessage;
+    private By shippingMethodSuccessAlert;
     
     // Payment Method
     private By paymentMethodChooseButton;
@@ -50,9 +52,14 @@ public class CheckoutPage {
 	
 	// Shipping Method Validation
 	private By shippingMethodValidation;
-	
+
 	// Payment Method Validation
 	private By paymentMethodValidation;
+	private By paymentMethodSuccessAlert;
+	
+	private By newAddressRadio;
+	private By selectAddressRadio;
+	private By shippingAddressSuccessAlert;
 	
 	public CheckoutPage(WebDriver driver) {
 		
@@ -72,6 +79,7 @@ public class CheckoutPage {
 		shippingMethodChooseButton=By.id("button-shipping-methods");
 		paymentMethodChooseButton=By.id("button-payment-methods");
 		
+		shippingMethodRadioButton = By.id("input-shipping-method-flat-flat");
 		shippingMethodContinueButton=By.id("button-shipping-method");
 		paymentMethodContinueButton=By.id("button-payment-method");
 		
@@ -84,9 +92,28 @@ public class CheckoutPage {
 
 		shippingMethodValidation = By.id("error-shipping-method");
 		paymentMethodValidation = By.id("error-payment-method");
+		newAddressRadio = By.id("input-shipping-new");
+		selectAddressRadio=By.id("input-shipping-address");
+		shippingAddressSuccessAlert =By.cssSelector("#alert .alert-success");
+		shippingMethodSuccessAlert=By.xpath("//div[contains(@class,'alert-success') and normalize-space()='Success: You have changed shipping method!']");
+		paymentMethodSuccessAlert=By.xpath("//div[contains(@class,'alert-success') and normalize-space()='Success: You have changed payment method!']");
+		
+		
 	
 	}
-		
+	
+	
+	public void selectShippingMethod() {
+		 WebElement radio = wait.until(
+			        ExpectedConditions.elementToBeClickable(
+			            shippingMethodRadioButton
+			        )
+			    );
+
+			    if (!radio.isSelected()) {
+			        radio.click();
+			    }
+	}
 		public String getCheckoutHeading() {
 			
 			return driver.findElement(checkoutHeading).getText();
@@ -136,6 +163,14 @@ public class CheckoutPage {
 			            new Select(driver.findElement(regionState));
 
 			    select.selectByVisibleText(regionName);
+		}
+		
+		public void selectExistingAdddress(String selectAddress) {  //tanımlı adreslerden seçme 
+			
+			 Select select =
+			            new Select(driver.findElement(selectAddressRadio));
+             select.selectByVisibleText(selectAddress);
+			  
 		}
 		
 		public void clickShippingAddressContinue() {
@@ -199,5 +234,66 @@ public class CheckoutPage {
 			return element.getAttribute("textContent").trim();
 		
 		}
+		
+		public boolean isFirstNameValidationDisplayed() {
+		    return driver.findElements(firstNameValidation).size() > 0 
+		            && driver.findElement(firstNameValidation).isDisplayed();
+		}
+		
+		public boolean isAddress1ValidationDisplayed() {
+		    return driver.findElements(address1Validation).size() > 0   //validation mesajı var mı yok mu diye kontrol et
+		            && driver.findElement(address1Validation).isDisplayed(); 
+		}
 
+		public void selectNewAddress() {
+		    driver.findElement(newAddressRadio).click();
+		}
+		
+		public String getShippingAddressSuccessAlertMessage() {
+		    WebElement alert = wait.until(
+		        ExpectedConditions.visibilityOfElementLocated(shippingAddressSuccessAlert)
+		    );
+
+		    return alert.getText().trim();
+		}
+		
+		
+		
+		public void clickShippingMethodChoose() {
+		    driver.findElement(shippingMethodChooseButton).click();
+		}
+		
+		public void clickShippingMethodContinue() {
+		    driver.findElement(shippingMethodContinueButton).click();
+		}
+		
+		public String getShippingMethodSuccessAlertMessage() {
+
+		    WebElement alert = wait.until(
+		            ExpectedConditions.visibilityOfElementLocated(
+		                shippingMethodSuccessAlert
+		            )
+		        );
+
+		        return alert.getText().trim();
+		}
+		
+		public String getPaymentMethodSuccessAlertMessage() {
+
+		    WebElement alert = wait.until(
+		        ExpectedConditions.visibilityOfElementLocated(
+		            paymentMethodSuccessAlert
+		        )
+		    );
+
+		    return alert.getText().trim();
+		}
+		
+		public void clickPaymentMethodChoose() {
+		    driver.findElement(paymentMethodChooseButton).click();
+		}
+		
+		public void clickPaymentMethodContinue() {
+		    driver.findElement(paymentMethodContinueButton).click();
+		}
 }
