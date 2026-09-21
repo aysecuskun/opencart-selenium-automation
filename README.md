@@ -6,7 +6,7 @@ This project is a Selenium WebDriver automation framework developed using Java, 
 
 The main goal of this project is to automate critical user flows of the OpenCart e-commerce application and demonstrate a maintainable test automation structure using the Page Object Model (POM).
 
-The project will be developed incrementally, starting with core functional scenarios and expanding to different Selenium and TestNG concepts.
+The automation coverage was developed incrementally, starting with authentication and product-related scenarios and progressing through basket, checkout, and order flows.
 
 ---
 
@@ -27,12 +27,13 @@ The project will be developed incrementally, starting with core functional scena
 ```text
 src/test/java
 │
-├── pageObjects
-│   ├── LoginPage.java
+├── pages
 │   ├── HomePage.java
+│   ├── LoginPage.java
 │   ├── SearchPage.java
 │   ├── ProductPage.java
-│   └── CartPage.java
+│   ├── BasketPage.java
+│   └── CheckoutPage.java
 │
 ├── testBase
 │   └── BaseClass.java
@@ -41,38 +42,48 @@ src/test/java
     ├── LoginTest.java
     ├── SearchTest.java
     ├── ProductTest.java
-    └── CartTest.java
+    ├── CartTest.java
+    └── CheckoutTest.java
 ```
 
 ---
 
 ## Test Scope
 
-### Login
+### Authentication
 
-* Valid login
-* Invalid password
-* Invalid email
-* Empty password
-* Empty email
+* Login positive and negative scenarios
 
-### Search
+### Product & Search
 
-* Search for an existing product
-* Search for a non-existing product
-* Search with an empty value
-
-### Product
-
+* Product search scenarios
 * Product details validation
-* Add product to cart
+* Product price and image validation
+* Add product to basket
+* Successful add-to-basket message validation
 
-### Cart
+### Basket
 
-* Verify product in cart
-* Validate product quantity
-* Update product quantity
-* Remove product from cart
+* Product validation
+* Quantity validation
+* Quantity update
+* Product removal
+* Basket total validation
+* Empty basket validation
+
+### Checkout
+
+* Checkout page validation
+* Shipping address validation
+* Required field validation
+* Shipping method validation
+* Payment method validation
+* Negative checkout scenarios
+
+### Order
+
+* End-to-end checkout flow
+* Order completion validation
 
 ---
 
@@ -80,30 +91,32 @@ src/test/java
 
 ### Smoke Tests
 
-Smoke tests will cover the critical functionalities of the application:
+Smoke tests cover the main critical functionalities of the application:
 
 * Login
 * Product Search
 * Product Details
-* Add to Cart
-* Cart Access
+* Add to Basket
+* Basket Access
+* Checkout
+* Order Completion
 
 ### Regression Tests
 
-Regression tests will cover a broader range of functional scenarios:
+Regression coverage includes:
 
 * Login positive and negative scenarios
 * Search scenarios
 * Product validation
-* Cart operations
-* Wishlist
-* Checkout
+* Basket operations
+* Checkout validation scenarios
+* Order flow
 
 ---
 
 ## TestNG
 
-The project will use TestNG features such as:
+The project uses TestNG features such as:
 
 * `@Test`
 * `@BeforeMethod`
@@ -117,16 +130,56 @@ The project will use TestNG features such as:
 
 ## Automation Approach
 
-The Page Object Model will be used to separate page elements and actions from test cases.
+The Page Object Model is used to separate page elements and page actions from test cases.
 
-Test data will be handled using TestNG DataProvider where appropriate, allowing the same test scenario to be executed with different input values.
+Page-specific locators and actions are maintained inside dedicated page classes, while test classes are responsible for executing scenarios and validating expected results.
 
-The framework will also use appropriate Selenium synchronization techniques such as explicit waits for dynamic elements.
+Test data is handled using TestNG `DataProvider` where appropriate, allowing the same test scenario to be executed with different input values.
+
+The framework also uses Selenium synchronization techniques and browser interaction methods to handle dynamic elements and page transitions.
+
+---
+
+## Test Data
+
+Test scenarios and test data are maintained using Excel during the test design process.
+
+The Excel scenarios are used as a reference for organizing and implementing the automated test cases.
+
+---
+
+## End-to-End Automation Flow
+
+The project covers the following main e-commerce flow:
+
+```text
+Login
+  ↓
+Search Product
+  ↓
+Product Details
+  ↓
+Add to Basket
+  ↓
+Basket
+  ↓
+Checkout
+  ↓
+Shipping Address
+  ↓
+Shipping Method
+  ↓
+Payment Method
+  ↓
+Order Completion
+```
 
 ---
 
 ## Project Status
 
-🚧 Project is currently under development.
+✅ Core automation flow completed from login to order completion.
 
-The framework and test coverage will be expanded progressively as new Selenium and TestNG concepts are implemented.
+The project currently includes positive and negative functional scenarios across authentication, search, product, basket, and checkout functionalities.
+
+The framework will continue to be improved with additional automation concepts, reporting, CI/CD integration, API testing, and other practices as the project evolves.

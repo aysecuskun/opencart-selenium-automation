@@ -60,7 +60,7 @@ public class CheckoutPage {
 	private By newAddressRadio;
 	private By selectAddressRadio;
 	private By shippingAddressSuccessAlert;
-	
+	private By comfirmButton;
 	public CheckoutPage(WebDriver driver) {
 		
 		this.driver=driver;
@@ -97,11 +97,26 @@ public class CheckoutPage {
 		shippingAddressSuccessAlert =By.cssSelector("#alert .alert-success");
 		shippingMethodSuccessAlert=By.xpath("//div[contains(@class,'alert-success') and normalize-space()='Success: You have changed shipping method!']");
 		paymentMethodSuccessAlert=By.xpath("//div[contains(@class,'alert-success') and normalize-space()='Success: You have changed payment method!']");
-		
+		comfirmButton=By.id("button-confirm");
 		
 	
 	}
+	public void clickConfirmButton() {
+		 WebElement button = wait.until(
+			        ExpectedConditions.presenceOfElementLocated(comfirmButton)
+			    );
+
+			    ((JavascriptExecutor) driver).executeScript(
+			        "arguments[0].scrollIntoView({block: 'center'});",
+			        button
+			    );
+
+			    ((JavascriptExecutor) driver).executeScript(
+			        "arguments[0].click();",
+			        button
+			    );
 	
+	}
 	
 	public void selectShippingMethod() {
 		 WebElement radio = wait.until(

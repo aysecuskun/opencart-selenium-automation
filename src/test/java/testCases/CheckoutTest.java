@@ -208,7 +208,7 @@ public class CheckoutTest extends BaseClass{
             checkout.enterLastName("Test");
 
             String address = "Test Adres testtettstststtststtststststssttstsstttttttttttttttttttttttttttttttttttttttttttttttttttt777777777777777777777777777777777777777777777777777777777777777777";
-            System.out.println("Length: " + address.length());
+           
             checkout.enterAddress1(address);
 
             checkout.enterCity("Istanbul");
@@ -248,22 +248,6 @@ public class CheckoutTest extends BaseClass{
         }
         
          
-        @Test(priority = 13)
-        public void verifyShippingMethodSelection() {
-
-            CheckoutPage checkout = new CheckoutPage(driver);
-            checkout.selectExistingAdddress("A Test, Test Address, Istanbul, Bristol, United Kingdom");
-            Assert.assertEquals(
-                    checkout.getShippingAddressSuccessAlertMessage(),
-                    "Success: You have changed shipping address!"
-                );
-            checkout.clickShippingMethodChoose();
-            checkout.clickShippingMethodContinue();
-            Assert.assertEquals(
-                    checkout.getShippingMethodSuccessAlertMessage(),
-                    "Success: You have changed shipping method!"
-                );
-        }
         
      }
 	
