@@ -25,7 +25,7 @@ public class SuccessOrderTest extends BaseClass{
 
 	    LoginPage loginpage = new LoginPage(driver);
 
-	    loginpage.getLogin("Deneme1@gmail.com", "Deneme1");
+	    loginpage.getLogin("Universe1@gmail.com", "universe");
 	    Assert.assertTrue(loginpage.isLoginSuccessful());
 	
 	    homepage = new HomePage(driver); 
@@ -36,7 +36,8 @@ public class SuccessOrderTest extends BaseClass{
 		searchpage.clickProduct(productName); 
 		
 		ProductPage productPage = new ProductPage(driver);
-
+		System.out.println("URL: " + driver.getCurrentUrl());
+		System.out.println("TITLE: " + driver.getTitle());
         productPage.addToCartButtonClick();
 
         Assert.assertTrue(
@@ -52,32 +53,34 @@ public class SuccessOrderTest extends BaseClass{
 	}
 	 
 	 @Test
-     public void verifyShippingMethodSelection() {  
+     public void verifyShippingMethodSelection() throws InterruptedException {  
 
          CheckoutPage checkout = new CheckoutPage(driver);
-         checkout.selectExistingAdddress("Test Test, Test Address 1, İstanbul, Angus, United Kingdom");
+         checkout.selectExistingAdddress("Test User, Test Address, Istanbul, Bristol, United Kingdom");
          Assert.assertEquals(
                  checkout.getShippingAddressSuccessAlertMessage(),
                  "Success: You have changed shipping address!"
              );
-         
+         Thread.sleep(5000);
          checkout.clickShippingMethodChoose();
          checkout.clickShippingMethodContinue();
          Assert.assertEquals(
                  checkout.getShippingMethodSuccessAlertMessage(),
                  "Success: You have changed shipping method!"
              );
-         
+         Thread.sleep(5000);
          checkout.clickPaymentMethodChoose();
          checkout.clickPaymentMethodContinue();
 	     Assert.assertEquals(
 	         checkout.getPaymentMethodSuccessAlertMessage(),
 	         "Success: You have changed payment method!"
 	     );
-	     
+	     Thread.sleep(5000);
 	     checkout.clickConfirmButton();
 	     OrderPage orderpage=new OrderPage(driver);
 	     Assert.assertEquals(orderpage.getMessage(), "Your order has been placed!");
+	     Thread.sleep(5000);
+	     
      }
 	
 }
