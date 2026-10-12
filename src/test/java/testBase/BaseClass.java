@@ -4,8 +4,10 @@ import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterClass;
+
+import org.testng.annotations.BeforeClass;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +16,7 @@ public class BaseClass {
 	
 	public WebDriver driver;
 	public String baseURL="http://localhost/opencart/upload/index.php";
-	@BeforeTest
+	@BeforeClass
 	public void setup() {
 
 
@@ -40,7 +42,7 @@ public class BaseClass {
 	    driver.manage().window().maximize();
 	}
 	
-	@AfterTest
+	@AfterClass
 	public void Deartown() throws InterruptedException {
 		Thread.sleep(5000);
 		driver.quit();
