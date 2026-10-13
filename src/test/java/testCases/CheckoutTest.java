@@ -25,7 +25,7 @@ public class CheckoutTest extends BaseClass{
 
 	    LoginPage loginpage = new LoginPage(driver);
 
-	    loginpage.getLogin("Test@gmail.com", "Test123");
+	    loginpage.getLogin("jenkins@gmail.com", "jenkins");
 	    Assert.assertTrue(loginpage.isLoginSuccessful());
 	
 	    homepage = new HomePage(driver); 
