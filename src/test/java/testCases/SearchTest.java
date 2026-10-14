@@ -15,7 +15,7 @@ public class SearchTest extends BaseClass{
 	@DataProvider(name = "searchData")
 	public Object[][] searchData() {
 	    return new Object[][] {
-	        {"MacBook", "existing"},
+	        {"iPhone", "existing"},
 	        {"XYZ123NonExistingProduct", "notExisting"},
 	        {" ", "empty"}
 	    };
