@@ -26,30 +26,14 @@ public class CheckoutSelectnewAddressTest extends BaseClass {
 
 	    LoginPage loginpage = new LoginPage(driver);
 
-	    loginpage.getLogin("Deneme1@gmail.com", "Deneme1");
+	    loginpage.getLogin("Test@gmail.com", "Test123");
 	    Assert.assertTrue(loginpage.isLoginSuccessful());
-	
+	 
 	    homepage = new HomePage(driver); 
-		homepage.searchProduct("Iphone"); 
-		SearchPage searchpage = new SearchPage(driver);
-		
-		String productName = searchpage.getProductName();
-		searchpage.clickProduct(productName); 
-		
-		ProductPage productPage = new ProductPage(driver);
-
-        productPage.addToCartButtonClick();
-
-        Assert.assertTrue(
-            productPage.getAddToCartAlertMessage()
-                .contains("Success: You have added")
-        );
-
-        productPage.clickShoppingCartLink();
-
-        BasketPage basketPage = new BasketPage(driver);
-
-        basketPage.clickCheckout();
+	    homepage.clickCheckoutButton();
+	    
+	     CheckoutPage checkoutpage=new CheckoutPage(driver);
+	     Assert.assertEquals(checkoutpage.getCheckoutHeading(), "Checkout");
 	 
 	}
 	

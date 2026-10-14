@@ -29,31 +29,15 @@ public class CheckoutTest extends BaseClass{
 	    Assert.assertTrue(loginpage.isLoginSuccessful());
 	
 	    homepage = new HomePage(driver); 
-		homepage.searchProduct("Iphone"); 
-		SearchPage searchpage = new SearchPage(driver);
-		
-		String productName = searchpage.getProductName();
-		searchpage.clickProduct(productName); 
-		
-		ProductPage productPage = new ProductPage(driver);
-
-        productPage.addToCartButtonClick();
-
-        Assert.assertTrue(
-            productPage.getAddToCartAlertMessage()
-                .contains("Success: You have added")
-        );
-
-        productPage.clickShoppingCartLink();
-
-        BasketPage basketPage = new BasketPage(driver);
-
-        basketPage.clickCheckout();
-	 
+	    homepage.clickCheckoutButton();
+	    
+	     CheckoutPage checkoutpage=new CheckoutPage(driver);
+	     Assert.assertEquals(checkoutpage.getCheckoutHeading(), "Checkout");
+	    
 	}
 	
 
-        @Test(priority = 4)
+        @Test(priority = 1)
         public void verifyFirstNameValidation() {
 
             CheckoutPage checkout = new CheckoutPage(driver);
@@ -74,7 +58,7 @@ public class CheckoutTest extends BaseClass{
         }
         
         
-        @Test(priority = 5)
+        @Test(priority = 2)
         public void verifyLastNameValidation() {
 
             CheckoutPage checkout = new CheckoutPage(driver);
@@ -94,11 +78,11 @@ public class CheckoutTest extends BaseClass{
             );
         }
        
-        @Test(priority = 6)
+        @Test(priority = 3)
         public void verifyAddress1Validation() {
 
             CheckoutPage checkout = new CheckoutPage(driver);
-            checkout.selectNewAddress();
+         
             checkout.enterFirstName("Test");
             checkout.enterLastName("User");
             checkout.enterCity("Istanbul");
@@ -114,7 +98,7 @@ public class CheckoutTest extends BaseClass{
             );
         }
         
-        @Test(priority = 7)
+        @Test(priority = 4)
         public void verifyCityValidation() {
 
             CheckoutPage checkout = new CheckoutPage(driver);
@@ -134,7 +118,7 @@ public class CheckoutTest extends BaseClass{
             );
         }
         
-        @Test(priority = 8)
+        @Test(priority = 5)
         public void verifyPostCodeValidation() {
 
             CheckoutPage checkout = new CheckoutPage(driver);
@@ -155,7 +139,7 @@ public class CheckoutTest extends BaseClass{
             );
         }
         
-        @Test(priority = 9)
+        @Test(priority = 6)
         public void verifyRegionStateValidation() {
 
             CheckoutPage checkout = new CheckoutPage(driver);
