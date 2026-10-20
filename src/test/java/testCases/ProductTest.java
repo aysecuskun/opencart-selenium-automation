@@ -43,10 +43,27 @@ import pages.HomePage;
 		    
 		}
 
-		
-		  @Test(priority = 2)                //Add to Cart → popup çıktı mı?Linke tıklandı mı 
+	    @Test(priority=2)          // Ürünün görseli görünüyor mu?
+	    public void verifyProductImageDisplayed() {
 
-		    public void verifyAddToCartSuccessMessage() {
+	        HomePage homepage = new HomePage(driver);
+	        homepage.searchProduct("Iphone");
+
+	        SearchPage searchpage = new SearchPage(driver);
+
+	        String productName = searchpage.getProductName();
+
+	        searchpage.clickProduct(productName);
+
+	        ProductPage productPage = new ProductPage(driver);
+
+	        Assert.assertTrue(
+	            productPage.isProductImageDisplayed()
+	        );
+	    }
+		
+		    @Test(priority=3)            //Ürün detay sayfasında ki ürünün fiyatı dolu mu boş mu? 
+		    public void verifyProductPrice() {
 
 		        HomePage homepage = new HomePage(driver);
 		        homepage.searchProduct("Iphone");
@@ -59,15 +76,12 @@ import pages.HomePage;
 
 		        ProductPage productPage = new ProductPage(driver);
 
-		        productPage.addToCartButtonClick();
-
-		        Assert.assertTrue(
-		                productPage.getAddToCartAlertMessage()
-		                        .contains("Success: You have added")
+		        Assert.assertFalse(
+		            productPage.getProductPrice().isEmpty()
 		        );
 		    }
-		  
-		    @Test(priority=3)                  //Add to Cart → popup → Shopping Cart linkine tıkla → BasketPage'e geldik mi?
+		    
+		    @Test(priority=4)                  //Add to Cart → popup → Shopping Cart linkine tıkla → BasketPage'e geldik mi?
 		    public void verifyShoppingCartNavigation() {
 
 		        HomePage homepage = new HomePage(driver);
@@ -96,9 +110,10 @@ import pages.HomePage;
 		                basketPage.getBasketHeading().startsWith("Shopping Cart")
 		        );
 		    }
-		    
-		    @Test(priority=4)            //Ürün detay sayfasında ki ürünün fiyatı dolu mu boş mu? 
-		    public void verifyProductPrice() {
+		   
+		    @Test(priority = 5)                //Add to Cart → popup çıktı mı?Linke tıklandı mı 
+
+		    public void verifyAddToCartSuccessMessage() {
 
 		        HomePage homepage = new HomePage(driver);
 		        homepage.searchProduct("Iphone");
@@ -111,29 +126,16 @@ import pages.HomePage;
 
 		        ProductPage productPage = new ProductPage(driver);
 
-		        Assert.assertFalse(
-		            productPage.getProductPrice().isEmpty()
-		        );
-		    }
-		    
-		    @Test(priority=5)          // Ürünün görseli görünüyor mu?
-		    public void verifyProductImageDisplayed() {
-
-		        HomePage homepage = new HomePage(driver);
-		        homepage.searchProduct("Iphone");
-
-		        SearchPage searchpage = new SearchPage(driver);
-
-		        String productName = searchpage.getProductName();
-
-		        searchpage.clickProduct(productName);
-
-		        ProductPage productPage = new ProductPage(driver);
+		        productPage.addToCartButtonClick();
 
 		        Assert.assertTrue(
-		            productPage.isProductImageDisplayed()
+		                productPage.getAddToCartAlertMessage()
+		                        .contains("Success: You have added")
 		        );
 		    }
+		  
+		    
+		
 	}
 
 
