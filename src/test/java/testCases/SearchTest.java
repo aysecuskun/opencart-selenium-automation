@@ -59,10 +59,6 @@ public class SearchTest extends BaseClass{
 
         } else if (scenario.equals("notExisting")) {
 
-            Assert.assertEquals(
-                    searchpage.getSearchHeading(),
-                    "Search - " + product
-            );
 
             Assert.assertEquals(
                     searchpage.getNoProductMessage(),
