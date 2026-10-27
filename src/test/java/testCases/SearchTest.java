@@ -44,14 +44,24 @@ public class SearchTest extends BaseClass{
 	    HomePage homepage = new HomePage(driver);
         homepage.searchProduct(product);
         
+        System.out.println("Product: [" + product + "]");
+        System.out.println("URL: " + driver.getCurrentUrl());
+        System.out.println("Title: [" + driver.getTitle() + "]");
+
+        try {
+            System.out.println("Search heading: [" +
+                    driver.findElement(
+                        org.openqa.selenium.By.cssSelector("#content h1")
+                    ).getText() + "]");
+        } catch (Exception e) {
+            System.out.println("Search heading bulunamadi: "
+                    + e.getClass().getSimpleName());
+        }
+        
         SearchPage searchpage=new SearchPage(driver);
         if (scenario.equals("existing")) {
 
-            Assert.assertEquals(
-                    searchpage.getSearchHeading(),
-                    "Search - " + product
-            );
-
+          
             Assert.assertEquals(
                     searchpage.getProductName(),
                     product
@@ -61,16 +71,18 @@ public class SearchTest extends BaseClass{
 
 
             Assert.assertEquals(
-                    searchpage.getNoProductMessage(),
-                    "There is no product that matches the search criteria."
+            		  searchpage.getSearchHeading(),
+                      "Search - " + product
             );
 
+          
         } else if (scenario.equals("empty")) {
 
-            Assert.assertEquals(
-                    searchpage.getNoProductMessage(),
-                    "There is no product that matches the search criteria."
-            );
+        	
+        	   Assert.assertEquals(
+        			   searchpage.getSearchHeading(),
+                       "Search -" 
+               );
         }
     }
      

@@ -25,7 +25,7 @@ public class SearchPage {
 	        this.driver = driver;
 	      
 	       // productImage = By.cssSelector("img[title='HP LP3065']");//sepette olan ürünün ismi
-	        noProductMessage = By.xpath("//div[@id='content']//p");   // ürün girildikten sonra aranılan değerin olmadığını veren locator 
+	        noProductMessage = By.xpath("//input[@id='input-search']");   // ürün girildikten sonra aranılan değerin olmadığını veren locator 
 	    	searchHeading=By.cssSelector("div[id='content'] h1");
 
 	    }
