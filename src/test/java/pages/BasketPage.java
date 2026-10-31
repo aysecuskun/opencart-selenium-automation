@@ -64,6 +64,15 @@ public class BasketPage {
 	 public String getProductPrice() {
 		    return driver.findElement(productPrice).getText();
 		}
+	 
+	 public String getProductPriceByProductName(String productName) {
+		    By productPriceByName = By.xpath(
+		        "//td[contains(@class,'text-start')]/a[normalize-space()='"
+		        + productName
+		        + "']/ancestor::tr/td[4]"
+		    );
+		    return driver.findElement(productPriceByName).getText();
+		}
 	
 	 public String getTotalPrice() {
 		    return driver.findElement(totalPrice).getText();

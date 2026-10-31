@@ -1,3 +1,4 @@
+
 package pages;
 
 import java.time.Duration;
@@ -11,64 +12,122 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SearchPage {
-	
-	 WebDriver driver;
 
-	    // Locators
-	  
-	    //private By productImage;
-	    private By noProductMessage;
-	    private By searchHeading;  
-	    private By productImage = By.cssSelector("div.product-thumb img");
+    private WebDriver driver;
+    private WebDriverWait wait;
 
-	    public SearchPage(WebDriver driver) {
-	        this.driver = driver;
-	      
-	       // productImage = By.cssSelector("img[title='HP LP3065']");//sepette olan ürünün ismi
-	        noProductMessage = By.xpath("//input[@id='input-search']");   // ürün girildikten sonra aranılan değerin olmadığını veren locator 
-	    	searchHeading=By.cssSelector("div[id='content'] h1");
+    private By noProductMessage;
+    private By searchHeading;
+    private By productImages;
 
-	    }
+    public SearchPage(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-	    // Methods
-	    public String getProductName() {
-	        return driver.findElement(productImage).getAttribute("alt");
-	    }
-	  
-      
-	    public String getNoProductMessage() {
-	        return driver.findElement(noProductMessage).getText();
-	    }
-	    
-	    
-	    public String getSearchHeading() {
-	    	   WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        noProductMessage = By.cssSelector("#content p");
+        searchHeading = By.cssSelector("#content h1");
+        productImages = By.cssSelector("div.product-thumb img");
+    }
 
-	    	    return wait.until(
-	    	        ExpectedConditions.visibilityOfElementLocated(searchHeading)
-	    	    ).getText();
-	    }
-	    
-	    public boolean isProductDisplayed(String productName) {
-	        
-	        By product = By.xpath("//div[contains(@class,'product-thumb')]//img[contains(@alt,'" + productName + "')]");
+    public boolean isSearchPageDisplayed(String productName) {
+        try {
+            wait.until(ExpectedConditions.urlContains("route=product/search"));
 
-	        return driver.findElements(product).size() > 0;
-	    }
-	 
-	    public By productLink (String productName) {
-	    	  return By.xpath(
-	    		        "//div[contains(@class,'product-thumb')]//a[img[@alt='" + productName + "']]"
-	    		    );
-	    }
-	    
-	    public void clickProduct(String productName) {
+            String expectedHeading;
 
-	    	WebElement product = driver.findElement(productLink(productName));
+            if (productName == null || productName.trim().isEmpty()) {
+                expectedHeading = "Search -";
+            } else {
+                expectedHeading = "Search - " + productName.trim();
+            }
 
-	        new Actions(driver)
-	                .moveToElement(product)
-	                .click()
-	                .perform();
-	    }
+            wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                searchHeading, expectedHeading
+            ));
+
+            return driver.getCurrentUrl().contains("route=product/search")
+                && driver.findElement(searchHeading).getText().trim()
+                    .equals(expectedHeading);
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getSearchHeading() {
+        return wait.until(
+            ExpectedConditions.visibilityOfElementLocated(searchHeading)
+        ).getText().trim();
+    }
+
+    public String getProductName() {
+        return wait.until(
+            ExpectedConditions.visibilityOfElementLocated(productImages)
+        ).getAttribute("alt");
+    }
+
+    public boolean isProductDisplayed(String productName) {
+
+        By product = By.xpath(
+            "//div[contains(@class,'product-thumb')]//img[@alt='" + productName + "']"
+        );
+
+        return !driver.findElements(product).isEmpty();
+    }
+
+    // Görselin gerçekten yüklenip yüklenmediğini kontrol eder.
+    public boolean isProductImageLoaded(String productName) {
+
+        By product = By.xpath(
+            "//div[contains(@class,'product-thumb')]//img[@alt='" + productName + "']"
+        );
+
+        try {
+            WebElement image = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(product)
+            );
+
+            return (Boolean) ((JavascriptExecutor) driver).executeScript(
+                "return arguments[0].complete && arguments[0].naturalWidth > 0;",
+                image
+            );
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    public By productLink(String productName) {
+        return By.xpath(
+            "//div[contains(@class,'product-thumb')]//a[img[@alt='" 
+            + productName + "']]"
+        );
+    }
+
+    public void clickProduct(String productName) {
+
+        WebElement product = wait.until(
+            ExpectedConditions.elementToBeClickable(productLink(productName))
+        );
+
+        new Actions(driver)
+            .moveToElement(product)
+            .click()
+            .perform();
+    }
+
+    public String getNoProductMessage() {
+        return wait.until(
+            ExpectedConditions.visibilityOfElementLocated(noProductMessage)
+        ).getText().trim();
+    }
+
+    public boolean isNoProductMessageDisplayed() {
+        return !driver.findElements(noProductMessage).isEmpty()
+            && driver.findElement(noProductMessage).isDisplayed();
+    }
+
+    public boolean areProductImagesAbsent() {
+        return driver.findElements(productImages).isEmpty();
+    }
 }

@@ -33,26 +33,6 @@ public class BasketPriceTest extends BaseClass {
 		
 		String productName = searchpage.getProductName();
 		searchpage.clickProduct(productName); 
-		
-		 ProductPage productPage = new ProductPage(driver);
-
-		 productPage.goToBasket();
-
-		 BasketPage basketpage = new BasketPage(driver);
-
-		 basketpage.removeProduct();
-
-		 Assert.assertEquals(
-		         basketpage.getEmptyBasketMessage(),
-		         "Your shopping cart is empty!"
-		 );
-		 
-		 homepage = new HomePage(driver);
-		 homepage.searchProduct("Iphone");
-
-		 searchpage = new SearchPage(driver);
-		 productName = searchpage.getProductName();
-		 searchpage.clickProduct(productName);
 	}
 	
 	/*add to cart sonrası sepette olan ürün fiyatının önceden eklenen ürün fiyatıyla aynı olup olmadığını test eden senaryo */
@@ -61,6 +41,7 @@ public class BasketPriceTest extends BaseClass {
 		 public void verifyProductPriceInBasket() {             // 
 		     ProductPage productPage = new ProductPage(driver);
 
+		     String productName = productPage.getProductName();
 		     String productPrice = productPage.getProductPrice();
 
 		     productPage.addToCartButtonClick();
@@ -75,7 +56,7 @@ public class BasketPriceTest extends BaseClass {
 		     BasketPage basketPage = new BasketPage(driver);
 
 		     Assert.assertEquals(
-		         basketPage.getProductPrice(),
+		         basketPage.getProductPriceByProductName(productName),
 		         productPrice
 		     );
 		     

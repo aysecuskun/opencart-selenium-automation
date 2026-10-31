@@ -39,52 +39,75 @@ public class SearchTest extends BaseClass{
 	
 	@Test(dataProvider = "searchData")
 	public void searchProduct(String product, String scenario) {
-	  
 
 	    HomePage homepage = new HomePage(driver);
-        homepage.searchProduct(product);
-        
-        System.out.println("Product: [" + product + "]");
-        System.out.println("URL: " + driver.getCurrentUrl());
-        System.out.println("Title: [" + driver.getTitle() + "]");
+	    homepage.searchProduct(product);
 
-        try {
-            System.out.println("Search heading: [" +
-                    driver.findElement(
-                        org.openqa.selenium.By.cssSelector("#content h1")
-                    ).getText() + "]");
-        } catch (Exception e) {
-            System.out.println("Search heading bulunamadi: "
-                    + e.getClass().getSimpleName());
-        }
-        
-        SearchPage searchpage=new SearchPage(driver);
-        if (scenario.equals("existing")) {
+	    SearchPage searchpage = new SearchPage(driver);
 
-          
-            Assert.assertEquals(
-                    searchpage.getProductName(),
-                    product
-            );
+	    // 1. Üç senaryoda da arama sonuç sayfasına ulaşıldığını doğrula.
+	    Assert.assertTrue(
+	        searchpage.isSearchPageDisplayed(product),
+	        "Arama sonuç sayfasina ulasilamadi! Current URL: "
+	        + driver.getCurrentUrl()
+	        + " | Title: " + driver.getTitle()
+	    );
 
-        } else if (scenario.equals("notExisting")) {
+	    // 2. Senaryoya özel doğrulamalar.
+	    if (scenario.equals("existing")) {
 
+	        Assert.assertEquals(
+	            searchpage.getSearchHeading(),
+	            "Search - " + product
+	        );
 
-            Assert.assertEquals(
-            		  searchpage.getSearchHeading(),
-                      "Search - " + product
-            );
+	        Assert.assertTrue(
+	            searchpage.isProductDisplayed(product),
+	            "Aranan ürün görüntülenemedi: " + product
+	        );
 
-          
-        } else if (scenario.equals("empty")) {
+	        Assert.assertEquals(
+	            searchpage.getProductName(),
+	            product
+	        );
 
-        	
-        	   Assert.assertEquals(
-        			   searchpage.getSearchHeading(),
-                       "Search -" 
-               );
-        }
-    }
+	        Assert.assertTrue(
+	            searchpage.isProductImageLoaded(product),
+	            "Ürün görseli yüklenemedi: " + product
+	        );
+
+	    } else if (scenario.equals("notExisting")) {
+
+	        Assert.assertEquals(
+	            searchpage.getSearchHeading(),
+	            "Search - " + product
+	        );
+
+	        Assert.assertTrue(
+	            searchpage.isNoProductMessageDisplayed(),
+	            "Ürün bulunamadi mesaji görüntülenmedi."
+	        );
+
+	        Assert.assertEquals(
+	            searchpage.getNoProductMessage(),
+	            "There is no product that matches the search criteria."
+	        );
+
+	        Assert.assertTrue(
+	            searchpage.areProductImagesAbsent(),
+	            "Ürün bulunmamasina rağmen ürün görselleri mevcut."
+	        );
+
+	    } else if (scenario.equals("empty")) {
+
+	        Assert.assertEquals(
+	            searchpage.getSearchHeading(),
+	            "Search -"
+	        );
+
+	        // Boş aramanın gerçek uygulama davranışını burada doğrulayacağız.
+	    }
+	}
      
 	}
 	
